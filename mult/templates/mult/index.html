@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container pt-5">
+            <form action="" method="POST" id="post-form" >
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">P</label>
+                        <input type="number" class="form-control" id="P" value="3">
+                    </div></div>
+
+                    <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">R</label>
+                        <input type="number" class="form-control" id="R" value="2">
+                    </div></div>
+
+                    <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">b1</label>
+                        <input type="number" class="form-control" step="0.1" id="b1" value="0.1">
+                    </div></div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">b2</label>
+                    <input type="number" class="form-control" step="0.1" id="b2" value="0.1">
+                    </div></div>
+                
+                    <div class="col-md-4">
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Sp</label>
+                    <input type="number" class="form-control" id="Sp" value="30">
+                    </div></div>
+    
+                    <div class="col-md-4">
+                    <div class="form-group"> 
+                    <label for="exampleInputEmail1">N</label>
+                    <input type="number" class="form-control" id="N" value="10">
+                    </div></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-success btn btn-block" name=scb_button id="scb_button" value="scb_button"> SCB </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-success btn btn-block" name=pcb_button id="pcb_button" value="pcb_button"> PCB </button>
+                    </div>
+                </div>
+            </form>
+            <div class="posts" id= "block">
+                <div><p><b> SCB </b></p>
+                    <p> Значение согласно алгоритму SC: {{ sc_scb }}</p>
+                    <p> Значение согласно алгоритму BR: {{ br_scb }} </p>
+                    <p> Значение согласно алгоритму LR: {{ lr_scb }} </p>
+                    <p> Значение согласно алгоритму SR: {{ sr_scb }} </p>
+                    <p> Значение согласно алгоритму RC: {{ rc_scb }} </p>
+                    <p><b> Минимальное значение соответствует алгоритму {{ scb_alg_min }} </b></p>
+                    </div>
+                    <div>
+                    {% autoescape off %}
+                    {{ plot_scb }}
+                    {% endautoescape %}
+                </div> 
+            </div>
+        </div>
+        </div>
+
+    </body>
+    <script src="/static/js/jquery-2.2.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>	
+    <script>
+        $(document).on('click', '#scb_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_scb:$('#sc_scb').val(),
+                    br_scb:$('#br_scb').val(),
+                    lr_scb:$('#lr_scb').val(),
+                    sr_scb:$('#sr_scb').val(),
+                    rc_scb:$('#rc_scb').val(),
+
+                    scb_alg_min:$('#scb_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    $(".posts").prepend('<div>'+
+                        '<div>' +
+                            '<div>' + '<p><b> SCB </b></p>' +
+                                '<p> Значение согласно алгоритму SC: ' + json.sc_scb + '</p>' +
+                                '<p> Значение согласно алгоритму BR: ' + json.br_scb + '</p>' +
+                                '<p> Значение согласно алгоритму LR: ' + json.lr_scb + '</p>' +
+                                '<p> Значение согласно алгоритму SR: ' + json.sr_scb + '</p>' +
+                                '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p>' +  '<p>' + json.plot_scb + '</p>' +  
+                            '</div>' +
+                        '</div>' +
+                    '</div>' 
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#pcb_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_pcb:$('#sc_pcb').val(),
+                    br_pcb:$('#br_pcb').val(),
+                    lr_pcb:$('#lr_pcb').val(),
+                    sr_pcb:$('#sr_pcb').val(),
+                    rc_pcb:$('#rc_pcb').val(),
+
+                    pcb_alg_min:$('#pcb_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    $(".posts").prepend('<div>'+
+                        '<div>' +
+                            '<div>' + '<p><b> PCB </b></p>' +
+                                '<p> Значение согласно алгоритму SC: ' + json.sc_pcb + '</p>' +
+                                '<p> Значение согласно алгоритму BR: ' + json.br_pcb + '</p>' +
+                                '<p> Значение согласно алгоритму LR: ' + json.lr_pcb + '</p>' +
+                                '<p> Значение согласно алгоритму SR: ' + json.sr_pcb + '</p>' +
+                                '<p> Значение согласно алгоритму RC: ' + json.rc_pcb + '</p>' +
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pcb_alg_min + '</b></p>' +  '<p>' + json.plot_pcb + '</p>' +  
+                            '</div>' +
+                        '</div>' +
+                    '</div>' 
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+    </script>
+</html>
