@@ -52,9 +52,40 @@ def mainpage(request):
         pcb_alg_min = min_alg(sc_pcb, br_pcb, lr_pcb, sr_pcb, rc_pcb)
         plot_pcb = graph(sc_pcb, br_pcb, lr_pcb, sr_pcb, rc_pcb)
 
+        sc_sco = max(2*math.sqrt(T)*b1+2*math.sqrt(R*T)*b2+2*N*math.sqrt(T)*(math.sqrt(R)+1-(R-math.sqrt(R)-1)/math.sqrt(T))/Sp,N*T*(1-(1-R)/T)/Sp,2*math.sqrt(T)*b1+2*math.sqrt(R*T)*b2+N*P/Sp)
+        br_sco = b1*(P-P*R/(T-P)+1)+b2*(P-P/(T-P)+R)+1+R+P*N/Sp
+        lr_sco = b1*(P+1)+b2*(P+R*(1-1/(T-R)))+1+R/(T-R)+P*N/Sp
+        sr_sco = math.sqrt(T)*b1*(2-R/T)+b2*(T-1)+1+R/math.sqrt(T)+P*N/Sp
+        rc_sco = b1*(P+2+1/(0.5*N-1)-T/N)+b2*(P+2*R+R/(0.5*N)-T/N)+(N-1)*(1/(0.5*N-1)+R/(0.5*N)-T/pow(N,2))+P*N/Sp
+
+        sco_alg_min = min_alg(sc_sco, br_sco, lr_sco, sr_sco, rc_sco)
+        plot_sco = graph(sc_sco, br_sco, lr_sco, sr_sco, rc_sco)
+
+        sc_pco = max(max(2*math.sqrt(T)*(b1*(1-1/math.sqrt(T))+b2*math.sqrt(R)*(1-math.sqrt(R/T))),2*R*b2,2*b1)+(2*N*math.sqrt(T)*(math.sqrt(R)+1-(R-math.sqrt(R)-1)/math.sqrt(T)))/Sp,N*T*(1-(R-1)/T)/Sp,max(2*math.sqrt(T)*(b1*(1-1/math.sqrt(T))+b2*math.sqrt(R)*(1-math.sqrt(R/T))),2*R*b2,2*b1)+N*P/Sp)
+        br_pco = max(P*b1*(1-R/(T-P))+P*b2*(1-1/(T-P)),b1+1,R*(b2+1))+P*N/Sp
+        lr_pco = max(P*(b1+b2),R*(b2*(1-1/(T-R))+1/(T-R)),b1+1)+P*N/Sp
+        sr_pco = max(b2*P+b1*(2*math.sqrt(T)-2-R/math.sqrt(T)),R*(b2+1/math.sqrt(T)),2*b1+1)+P*N/Sp
+        rc_pco = max(2*b1+(T/2+T/N-P-2*R/N),2*R*b2+(N/(N-2)+R-0.5*T),b2*(T-T/N-R+2*R/N+(1+0.5*N)/(0.5*N-1))+b1*(T-R-T/N-1+1/(0.5*N-1)))+P*N/Sp
+        
+        pco_alg_min = min_alg(sc_pco, br_pco, lr_pco, sr_pco, rc_pco)
+        plot_pco = graph(sc_pco, br_pco, lr_pco, sr_pco, rc_pco)
+
+        sc_pio = 2*math.sqrt(T)*(b1+b2*math.sqrt(R))+(N-1)*max(2*math.sqrt(T)*(b1+b2*math.sqrt(R)), P*N/Sp)+P*N/Sp
+        br_pio = b1*(1+P*(1-R/(T-P)))+b2*(R+P*(1-1/(T-P)))+R+1+(N-1)*max(b1*(1+P*(1-R/(T-P)))+b2*(R+P*(1-1/(T-P)))+R+1,P*N/Sp)+P*N/Sp
+        lr_pio = b1*(P+1)+b2*(P+R-R/(T-R))+(1+R/(T-R))+(N-1)*max(b1*(P+1)+b2*(P+R-R/(T-R))+(1+R/(T-R)),P*N/Sp)+P*N/Sp
+        sr_pio = b1*math.sqrt(T)*(2-R/T)+b2*(T-1)+R/math.sqrt(T)+1+(N-1)*max(b1*math.sqrt(T)*(2-R/T)+b2*(T-1)+R/math.sqrt(T)+1,P*N/Sp)+P*N/Sp
+        rc_pio = b1*(1-R+T+1/(0.5*N-1)+T/N)+b2*(R+T+N/(N-2)+(1-N)/(0.5*N-1)+(2*R-T)/N)+(1+2*R-T+(T-2*R)/N+N/(N-2))+(N-1)*max((b1*(1-R+T+1/(0.5*N-1)+T/N)+b2*(R+T+N/(N-2)+(1-N)/(0.5*N-1)+(2*R-T)/N)+(1+2*R-T+(T-2*R)/N+N/(N-2))),P*N/Sp)+P*N/Sp
+
+        pio_alg_min = min_alg(sc_pio, br_pio, lr_pio, sr_pio, rc_pio)
+        plot_pio = graph(sc_pio, br_pio, lr_pio, sr_pio, rc_pio)
+
         response_data = {'P': P, 'R': R, 'b1': b1, 'b2': b2, 'Sp': Sp, 'N': N, 
             'scb_alg_min': scb_alg_min, 'plot_scb': plot_scb, 'sc_scb': sc_scb, 'br_scb': br_scb, 'lr_scb': lr_scb, 'sr_scb': sr_scb, 'rc_scb': rc_scb,
-            'pcb_alg_min': pcb_alg_min, 'plot_pcb': plot_pcb,  'sc_pcb': sc_pcb, 'br_pcb': br_pcb, 'lr_pcb': lr_pcb, 'sr_pcb': sr_pcb, 'rc_pcb': rc_pcb,}
+            'pcb_alg_min': pcb_alg_min, 'plot_pcb': plot_pcb,  'sc_pcb': sc_pcb, 'br_pcb': br_pcb, 'lr_pcb': lr_pcb, 'sr_pcb': sr_pcb, 'rc_pcb': rc_pcb,
+            'sco_alg_min': sco_alg_min, 'plot_sco': plot_sco, 'sc_sco': sc_sco, 'br_sco': br_sco, 'lr_sco': lr_sco, 'sr_sco': sr_sco, 'rc_sco': rc_sco,
+            'pco_alg_min': pco_alg_min, 'plot_pco': plot_pco,  'sc_pco': sc_pco, 'br_pco': br_pco, 'lr_pco': lr_pco, 'sr_pco': sr_pco, 'rc_pco': rc_pco,
+            'pio_alg_min': pio_alg_min, 'plot_pio': plot_pio,  'sc_pio': sc_pio, 'br_pio': br_pio, 'lr_pio': lr_pio, 'sr_pio': sr_pio, 'rc_pio': rc_pio,
+            }
         return JsonResponse(response_data)
     else: 
         return render(request, 'mult/index.html', {'P': mP, 'R': mR, 'b1': mb1, 'b2': mb2, 'Sp': mSp, 'N': mN, 'plot_scb': mplot_scb, 

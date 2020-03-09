@@ -47,17 +47,28 @@
                     </div></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row ">
+                    <div class="col">
                         <button type="submit" class="btn btn-success btn btn-block" name=scb_button id="scb_button" value="scb_button"> SCB </button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col">
                         <button type="submit" class="btn btn-success btn btn-block" name=pcb_button id="pcb_button" value="pcb_button"> PCB </button>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn btn-block" name=sco_button id="sco_button" value="sco_button"> SCO </button>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn btn-block" name=pco_button id="pco_button" value="pco_button"> PCO </button>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn btn-block" name=pio_button id="pio_button" value="pio_button"> PIO </button>
                     </div>
                 </div>
             </form>
-            <div class="posts" id= "block">
-                <div><p><b> SCB </b></p>
+            <div class="container posts" id= "block">
+                <div class="text-center border"><p><b> SCB </b></p></div>
+                <div class="row">
+                <div class="col-md-7 offset-md-1 item">
                     <p> Значение согласно алгоритму SC: {{ sc_scb }}</p>
                     <p> Значение согласно алгоритму BR: {{ br_scb }} </p>
                     <p> Значение согласно алгоритму LR: {{ lr_scb }} </p>
@@ -65,11 +76,15 @@
                     <p> Значение согласно алгоритму RC: {{ rc_scb }} </p>
                     <p><b> Минимальное значение соответствует алгоритму {{ scb_alg_min }} </b></p>
                     </div>
-                    <div>
+                    <div class="col-md-4">
+                    <p><img src="static/img/{{ scb_alg_min }}.jpg" height="230"></p>
+                    </div>
+                    </div>
+                    <div class="border">
                     {% autoescape off %}
                     {{ plot_scb }}
                     {% endautoescape %}
-                </div> 
+                    </div> 
             </div>
         </div>
         </div>
@@ -103,19 +118,21 @@
                 },
                 success:function(json){
                     $("#block").empty();
-                    $(".posts").prepend('<div>'+
-                        '<div>' +
-                            '<div>' + '<p><b> SCB </b></p>' +
+                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> SCB </b></p></div>' +
+                        '<div class="row">' + 
+                            '<div class="col-md-7 offset-md-1 item">' +
                                 '<p> Значение согласно алгоритму SC: ' + json.sc_scb + '</p>' +
                                 '<p> Значение согласно алгоритму BR: ' + json.br_scb + '</p>' +
                                 '<p> Значение согласно алгоритму LR: ' + json.lr_scb + '</p>' +
                                 '<p> Значение согласно алгоритму SR: ' + json.sr_scb + '</p>' +
                                 '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
-                                '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p>' +  '<p>' + json.plot_scb + '</p>' +  
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p></div>' + 
+                                '<div class="col-md-4">' + 
+                                '<p><img src="static/img/' + json.scb_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<p>' + json.plot_scb + '</p>' +  
                             '</div>' +
                         '</div>' +
-                    '</div>' 
-                    )
+                    '</div>');
                 },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
@@ -150,18 +167,171 @@
                 },
                 success:function(json){
                     $("#block").empty();
-                    $(".posts").prepend('<div>'+
-                        '<div>' +
-                            '<div>' + '<p><b> PCB </b></p>' +
+                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> PCB </b></p></div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-7 offset-md-1 item">' +
                                 '<p> Значение согласно алгоритму SC: ' + json.sc_pcb + '</p>' +
                                 '<p> Значение согласно алгоритму BR: ' + json.br_pcb + '</p>' +
                                 '<p> Значение согласно алгоритму LR: ' + json.lr_pcb + '</p>' +
                                 '<p> Значение согласно алгоритму SR: ' + json.sr_pcb + '</p>' +
                                 '<p> Значение согласно алгоритму RC: ' + json.rc_pcb + '</p>' +
-                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pcb_alg_min + '</b></p>' +  '<p>' + json.plot_pcb + '</p>' +  
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pcb_alg_min + '</b></p></div>' + 
+                                '<div class="col-md-4">' + 
+                                '<p><img src="static/img/' + json.pcb_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<p>' + json.plot_pcb + '</p>' +  
                             '</div>' +
                         '</div>' +
-                    '</div>' 
+                    '</div>'
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#sco_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_pcb:$('#sc_sco').val(),
+                    br_pcb:$('#br_sco').val(),
+                    lr_pcb:$('#lr_sco').val(),
+                    sr_pcb:$('#sr_sco').val(),
+                    rc_pcb:$('#rc_sco').val(),
+
+                    pcb_alg_min:$('#sco_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> SCO </b></p></div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-7 offset-md-1 item">' +
+                                '<p> Значение согласно алгоритму SC: ' + json.sc_sco + '</p>' +
+                                '<p> Значение согласно алгоритму BR: ' + json.br_sco + '</p>' +
+                                '<p> Значение согласно алгоритму LR: ' + json.lr_sco + '</p>' +
+                                '<p> Значение согласно алгоритму SR: ' + json.sr_sco + '</p>' +
+                                '<p> Значение согласно алгоритму RC: ' + json.rc_sco + '</p>' +
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.sco_alg_min + '</b></p></div>' + 
+                                '<div class="col-md-4">' + 
+                                '<p><img src="static/img/' + json.sco_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<p>' + json.plot_sco + '</p>' +  
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#pco_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_pcb:$('#sc_pco').val(),
+                    br_pcb:$('#br_pco').val(),
+                    lr_pcb:$('#lr_pco').val(),
+                    sr_pcb:$('#sr_pco').val(),
+                    rc_pcb:$('#rc_pco').val(),
+
+                    pcb_alg_min:$('#pco_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> PCO </b></p></div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-7 offset-md-1 item">' +
+                                '<p> Значение согласно алгоритму SC: ' + json.sc_pco + '</p>' +
+                                '<p> Значение согласно алгоритму BR: ' + json.br_pco + '</p>' +
+                                '<p> Значение согласно алгоритму LR: ' + json.lr_pco + '</p>' +
+                                '<p> Значение согласно алгоритму SR: ' + json.sr_pco + '</p>' +
+                                '<p> Значение согласно алгоритму RC: ' + json.rc_pco + '</p>' +
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pco_alg_min + '</b></p></div>' + 
+                                '<div class="col-md-4">' + 
+                                '<p><img src="static/img/' + json.pco_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<p>' + json.plot_pco + '</p>' +  
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                    )
+                },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#pio_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_pcb:$('#sc_pio').val(),
+                    br_pcb:$('#br_pio').val(),
+                    lr_pcb:$('#lr_pio').val(),
+                    sr_pcb:$('#sr_pio').val(),
+                    rc_pcb:$('#rc_pio').val(),
+
+                    pcb_alg_min:$('#pio_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> PIO </b></p></div>' +
+                        '<div class="row">' +
+                            '<div class="col-md-7 offset-md-1 item">' +
+                                '<p> Значение согласно алгоритму SC: ' + json.sc_pio + '</p>' +
+                                '<p> Значение согласно алгоритму BR: ' + json.br_pio + '</p>' +
+                                '<p> Значение согласно алгоритму LR: ' + json.lr_pio + '</p>' +
+                                '<p> Значение согласно алгоритму SR: ' + json.sr_pio + '</p>' +
+                                '<p> Значение согласно алгоритму RC: ' + json.rc_pio + '</p>' +
+                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pio_alg_min + '</b></p></div>' + 
+                                '<div class="col-md-4">' + 
+                                '<p><img src="static/img/' + json.pio_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<p>' + json.plot_pio + '</p>' +  
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
                     )
                 },
                 error : function(xhr,errmsg,err) {
