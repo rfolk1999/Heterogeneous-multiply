@@ -1,6 +1,10 @@
+{% load static %}
 <html>
     <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap-extended.css' %}">
     </head>
     <body>
         <div class="container pt-5">
@@ -68,7 +72,7 @@
             <div class="container posts" id= "block">
                 <div class="text-center border"><p><b> SCB </b></p></div>
                 <div class="row">
-                <div class="col-md-7 offset-md-1 item">
+                <div class="col-md-5 offset-md-1 item">
                     <p> Значение согласно алгоритму SC: {{ sc_scb }}</p>
                     <p> Значение согласно алгоритму BR: {{ br_scb }} </p>
                     <p> Значение согласно алгоритму LR: {{ lr_scb }} </p>
@@ -76,8 +80,18 @@
                     <p> Значение согласно алгоритму RC: {{ rc_scb }} </p>
                     <p><b> Минимальное значение соответствует алгоритму {{ scb_alg_min }} </b></p>
                     </div>
-                    <div class="col-md-4">
-                    <p><img src="static/img/{{ scb_alg_min }}.jpg" height="230"></p>
+                    <div class="col-md-6">
+                    <p><img src="static/img/SCB/{{ P }}-{{ R }}.png" height="300"></p>
+                    <form>
+                        <div class="form-group">
+                          <label for="formControlRange">Example Range input</label>
+                          <input type="range" class="form-control-range" id="Slider" list="tickmarks" min="3" max="20" value="{{ P }}" step="1">
+                          <datalist id="tickmarks">
+                            <option value="3" label="3"></option>
+                            <option value="20" label="20"></option>
+                          </datalist>
+                        </div>
+                      </form>
                     </div>
                     </div>
                     <div class="border">
@@ -92,6 +106,7 @@
     </body>
     <script src="/static/js/jquery-2.2.4.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.min.js"></script>	
     <script>
         $(document).on('click', '#scb_button',function(e){
             e.preventDefault();
@@ -120,15 +135,15 @@
                     $("#block").empty();
                     $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> SCB </b></p></div>' +
                         '<div class="row">' + 
-                            '<div class="col-md-7 offset-md-1 item">' +
+                            '<div class="col-md-5 offset-md-1 item">' +
                                 '<p> Значение согласно алгоритму SC: ' + json.sc_scb + '</p>' +
                                 '<p> Значение согласно алгоритму BR: ' + json.br_scb + '</p>' +
                                 '<p> Значение согласно алгоритму LR: ' + json.lr_scb + '</p>' +
                                 '<p> Значение согласно алгоритму SR: ' + json.sr_scb + '</p>' +
                                 '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
                                 '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p></div>' + 
-                                '<div class="col-md-4">' + 
-                                '<p><img src="static/img/' + json.scb_alg_min + '.jpg" height="230"></p></div></div>' +
+                                '<div class="col-md-6">' + 
+                                '<p><img src="static/img/SCB/' + json.P + '-' + json.R + '.png" height="300"></p></div></div>' +
                                 '<p>' + json.plot_scb + '</p>' +  
                             '</div>' +
                         '</div>' +
