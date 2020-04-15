@@ -5,6 +5,16 @@
         <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/bootstrap-extended.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script>
+            function sizePic(R) {
+            size = document.getElementById("size").value;
+            //size:$('#size').val();
+            $("#picblock").empty();
+            $(".picture").prepend('<p>P=' + size + '; R=' + R + '</p>' + 
+            '<p><img src="static/img/SCB/' + size + '-' + R + '.png" alt="" id="pic"></p>');
+            }
+           </script>
     </head>
     <body>
         <div class="container pt-5">
@@ -70,9 +80,10 @@
                 </div>
             </form>
             <div class="container posts" id= "block">
-                <div class="text-center border"><p><b> SCB </b></p></div>
+                <div class="nametext text-center border"><p><b> SCB </b></p></div>
+                <div class="container">
                 <div class="row">
-                <div class="col-md-5 offset-md-1 item">
+                <div class="algorithms col-md-5 ">
                     <p> Значение согласно алгоритму SC: {{ sc_scb }}</p>
                     <p> Значение согласно алгоритму BR: {{ br_scb }} </p>
                     <p> Значение согласно алгоритму LR: {{ lr_scb }} </p>
@@ -80,18 +91,26 @@
                     <p> Значение согласно алгоритму RC: {{ rc_scb }} </p>
                     <p><b> Минимальное значение соответствует алгоритму {{ scb_alg_min }} </b></p>
                     </div>
-                    <div class="col-md-6">
-                    <p><img src="static/img/SCB/{{ P }}-{{ R }}.png" height="300"></p>
+                    <div class="col-md-7">
                     <form>
-                        <div class="form-group">
-                          <label for="formControlRange">Example Range input</label>
-                          <input type="range" class="form-control-range" id="Slider" list="tickmarks" min="3" max="20" value="{{ P }}" step="1">
-                          <datalist id="tickmarks">
-                            <option value="3" label="3"></option>
-                            <option value="20" label="20"></option>
-                          </datalist>
-                        </div>
-                      </form>
+                            <div class="form-group">
+                              <!--<label for="formControlRange">Example Range input</label>-->
+                              <input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic({{ R }})" value="3">
+                              <datalist id="tickmarks">
+                                <option value="3" label="3"></option>
+                                <option value="20" label="20"></option>
+                              </datalist>
+
+                            </div>
+                    </form>
+                    <div class="picture center-block" id="picblock">
+                        <p>P={{ P }}; R={{ R }}</p>
+                        <p><img src="static/img/SCB/{{ P }}-{{ R }}.png" alt="" id="pic"></p>
+                    </div>
+                     
+                    <!--<p><img src="static/img/SCB/{{ P }}-{{ R }}.png" id="pic" height="300"></p>-->
+
+                    </div>
                     </div>
                     </div>
                     <div class="border">
@@ -143,7 +162,20 @@
                                 '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
                                 '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p></div>' + 
                                 '<div class="col-md-6">' + 
-                                '<p><img src="static/img/SCB/' + json.P + '-' + json.R + '.png" height="300"></p></div></div>' +
+                                '<form>' +
+                                '<div class="form-group">' +
+                                '<input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic(' + json.R + ')" value="3">' +
+                                '<datalist id="tickmarks">' +
+                                '<option value="3" label="3"></option>' +
+                                '<option value="20" label="20"></option>' +
+                                '</datalist>' +
+                                '</div>' +
+                                '</form>' +
+                                '<div class="picture center-block" id="picblock">' +
+                                '<p>P=' + json.P + '; R=' + json.R + '</p>' +
+                                '<p><img src="static/img/SCB/' + json.P + '-' + json.R + '.png" alt="" id="pic"></p>' +
+                                '</div>' + 
+                                '</div>' +
                                 '<p>' + json.plot_scb + '</p>' +  
                             '</div>' +
                         '</div>' +
