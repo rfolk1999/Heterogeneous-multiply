@@ -7,12 +7,12 @@
         <link rel="stylesheet" href="{% static 'css/bootstrap-extended.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <script>
-            function sizePic(R) {
+            function sizePic(R, alg) {
             size = document.getElementById("size").value;
             //size:$('#size').val();
             $("#picblock").empty();
             $(".picture").prepend('<p>P=' + size + '; R=' + R + '</p>' + 
-            '<p><img src="static/img/SCB/' + size + '-' + R + '.png" alt="" id="pic"></p>');
+            '<p><img src="static/img/' + alg +'/' + size + '-' + R + '.png" alt="" id="pic"></p>');
             }
            </script>
     </head>
@@ -95,7 +95,7 @@
                     <form>
                             <div class="form-group">
                               <!--<label for="formControlRange">Example Range input</label>-->
-                              <input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic({{ R }})" value="3">
+                              <input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic({{ R }}, 'SCB')" value="3">
                               <datalist id="tickmarks">
                                 <option value="3" label="3"></option>
                                 <option value="20" label="20"></option>
@@ -152,34 +152,40 @@
                 },
                 success:function(json){
                     $("#block").empty();
-                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> SCB </b></p></div>' +
-                        '<div class="row">' + 
-                            '<div class="col-md-5 offset-md-1 item">' +
-                                '<p> Значение согласно алгоритму SC: ' + json.sc_scb + '</p>' +
-                                '<p> Значение согласно алгоритму BR: ' + json.br_scb + '</p>' +
-                                '<p> Значение согласно алгоритму LR: ' + json.lr_scb + '</p>' +
-                                '<p> Значение согласно алгоритму SR: ' + json.sr_scb + '</p>' +
-                                '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
-                                '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p></div>' + 
-                                '<div class="col-md-6">' + 
-                                '<form>' +
-                                '<div class="form-group">' +
-                                '<input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic(' + json.R + ')" value="3">' +
-                                '<datalist id="tickmarks">' +
+                    $(".posts").prepend('<div class="nametext text-center border"><p><b> SCB </b></p></div>' +
+                '<div class="container">' +
+                '<div class="row">' +
+                '<div class="algorithms col-md-5 ">' +
+                    '<p> Значение согласно алгоритму SC: ' + json.sc_scb + '</p>' +
+                    '<p> Значение согласно алгоритму BR: ' + json.br_scb + '</p>' +
+                    '<p> Значение согласно алгоритму LR: ' + json.lr_scb + '</p>' +
+                    '<p> Значение согласно алгоритму SR: ' + json.sr_scb + '</p>' +
+                    '<p> Значение согласно алгоритму RC: ' + json.rc_scb + '</p>' +
+                    '<p><b> Минимальное значение соответствует алгоритму ' + json.scb_alg_min + '</b></p>' +
+                    '</div>' +
+                    '<div class="col-md-7">' +
+                    '<form>' +
+                            '<div class="form-group">' +
+                              '<input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic(' + json.R + ', \'SCB\')" value="'+ json.P + '">' +
+                              '<datalist id="tickmarks">' +
                                 '<option value="3" label="3"></option>' +
                                 '<option value="20" label="20"></option>' +
-                                '</datalist>' +
-                                '</div>' +
-                                '</form>' +
-                                '<div class="picture center-block" id="picblock">' +
-                                '<p>P=' + json.P + '; R=' + json.R + '</p>' +
-                                '<p><img src="static/img/SCB/' + json.P + '-' + json.R + '.png" alt="" id="pic"></p>' +
-                                '</div>' + 
-                                '</div>' +
-                                '<p>' + json.plot_scb + '</p>' +  
+                              '</datalist>' +
+
                             '</div>' +
-                        '</div>' +
-                    '</div>');
+                    '</form>' +
+                    '<div class="picture center-block" id="picblock">' +
+                        '<p>P=' + json.P + '; R=' + json.R + '</p>' +
+                        '<p><img src="static/img/SCB/' + json.P + '-' + json.R + '.png" alt="" id="pic"></p>' +
+                    '</div>' +
+                     
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="border">' +
+                        '<p>' + json.plot_scb + '</p>' +
+                    '</div>' 
+                    );
                 },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
@@ -214,22 +220,40 @@
                 },
                 success:function(json){
                     $("#block").empty();
-                    $(".posts").prepend('<div>'+ '<div class="text-center border"><p><b> PCB </b></p></div>' +
-                        '<div class="row">' +
-                            '<div class="col-md-7 offset-md-1 item">' +
-                                '<p> Значение согласно алгоритму SC: ' + json.sc_pcb + '</p>' +
-                                '<p> Значение согласно алгоритму BR: ' + json.br_pcb + '</p>' +
-                                '<p> Значение согласно алгоритму LR: ' + json.lr_pcb + '</p>' +
-                                '<p> Значение согласно алгоритму SR: ' + json.sr_pcb + '</p>' +
-                                '<p> Значение согласно алгоритму RC: ' + json.rc_pcb + '</p>' +
-                                '<p><b> Минимальное значение соответствует алгоритму ' + json.pcb_alg_min + '</b></p></div>' + 
-                                '<div class="col-md-4">' + 
-                                '<p><img src="static/img/' + json.pcb_alg_min + '.jpg" height="230"></p></div></div>' +
-                                '<p>' + json.plot_pcb + '</p>' +  
+                    $(".posts").prepend('<div class="nametext text-center border"><p><b> PCB </b></p></div>' +
+                '<div class="container">' +
+                '<div class="row">' +
+                '<div class="algorithms col-md-5 ">' +
+                    '<p> Значение согласно алгоритму SC: ' + json.sc_pcb + '</p>' +
+                    '<p> Значение согласно алгоритму BR: ' + json.br_pcb + '</p>' +
+                    '<p> Значение согласно алгоритму LR: ' + json.lr_pcb + '</p>' +
+                    '<p> Значение согласно алгоритму SR: ' + json.sr_pcb + '</p>' +
+                    '<p> Значение согласно алгоритму RC: ' + json.rc_pcb + '</p>' +
+                    '<p><b> Минимальное значение соответствует алгоритму ' + json.pcb_alg_min + '</b></p>' +
+                    '</div>' +
+                    '<div class="col-md-7">' +
+                    '<form>' +
+                            '<div class="form-group">' +
+                              '<input type="range" class="slider" min="3" max="20" id="size" oninput="sizePic(' + json.R + ', \'PCB\')" value="'+ json.P + '">' +
+                              '<datalist id="tickmarks">' +
+                                '<option value="3" label="3"></option>' +
+                                '<option value="20" label="20"></option>' +
+                              '</datalist>' +
+
                             '</div>' +
-                        '</div>' +
-                    '</div>'
-                    )
+                    '</form>' +
+                    '<div class="picture center-block" id="picblock">' +
+                        '<p>P=' + json.P + '; R=' + json.R + '</p>' +
+                        '<p><img src="static/img/PCB/' + json.P + '-' + json.R + '.png" alt="" id="pic"></p>' +
+                    '</div>' +
+                     
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="border">' +
+                        '<p>' + json.plot_pcb + '</p>' +
+                    '</div>' 
+                    );
                 },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
