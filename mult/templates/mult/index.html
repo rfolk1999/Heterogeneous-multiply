@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Level HTML Template</title>
+    <title>Heterogeneous Computing</title>
 
     
 <!--
@@ -78,7 +78,7 @@ http://www.tooplate.com/view/2095-level
                                     <div class="form-row tm-search-form-row">
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">P</label>
-                                            <input type="number" class="form-control" id="P" value="3">
+                                            <input type="number" class="form-control" id="P" value="7">
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">R</label>
@@ -86,14 +86,14 @@ http://www.tooplate.com/view/2095-level
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">b1</label>
-                                            <input type="number" class="form-control" step="0.1" id="b1" value="0.1">
+                                            <input type="number" class="form-control" step="0.1" id="b1" value="20.0">
                                         </div>
                                     </div>
 
                                     <div class="form-row tm-search-form-row">
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">b2</label>
-                                            <input type="number" class="form-control" step="0.1" id="b2" value="0.1">
+                                            <input type="number" class="form-control" step="0.1" id="b2" value="2.0">
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">Sp</label>
@@ -132,6 +132,7 @@ http://www.tooplate.com/view/2095-level
             </div>
 
             <div class="posts" id= "block">
+                <p> {{ xGrid }}</p>
             <div class="tm-section-2">
                 <div class="container">
                     <div class="row">
@@ -188,7 +189,6 @@ http://www.tooplate.com/view/2095-level
                                     <h3 class="tm-color-white tm-sidebar-title">Расчет для исходных данных</h3>
                                     </div>
                                 <div class="tm-sidebar-pad-2">
-                                    
                                         <p class="dline"> Значение согласно алгоритму SC: {{ sc_scb }}</p>
                                         <p class="dline"> Значение согласно алгоритму BR: {{ br_scb }} </p>
                                         <p class="dline"> Значение согласно алгоритму LR: {{ lr_scb }} </p>
@@ -397,6 +397,7 @@ http://www.tooplate.com/view/2095-level
                     lr_pcb:$('#lr_pcb').val(),
                     sr_pcb:$('#sr_pcb').val(),
                     rc_pcb:$('#rc_pcb').val(),
+                    ff4:$('#ff4').val(),
 
                     pcb_alg_min:$('#pcb_alg_min').val(),
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
@@ -405,6 +406,112 @@ http://www.tooplate.com/view/2095-level
                 success:function(json){
                     $("#block").empty();
                     rend(json.P, json.R, json.sc_pcb, json.br_pcb, json.lr_pcb, json.sr_pcb, json.rc_pcb, json.pcb_alg_min, json.plot_pcb, 'PCB');
+                    $(".posts").prepend('<p>' + json.ff4 +'</p>');
+                    },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#sco_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_sco:$('#sc_sco').val(),
+                    br_sco:$('#br_sco').val(),
+                    lr_sco:$('#lr_sco').val(),
+                    sr_sco:$('#sr_sco').val(),
+                    rc_sco:$('#rc_sco').val(),
+
+                    sco_alg_min:$('#sco_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    rend(json.P, json.R, json.sc_sco, json.br_sco, json.lr_sco, json.sr_sco, json.rc_sco, json.sco_alg_min, json.plot_sco, 'SCO');
+                    },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#pco_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_sco:$('#sc_pco').val(),
+                    br_sco:$('#br_pco').val(),
+                    lr_sco:$('#lr_pco').val(),
+                    sr_sco:$('#sr_pco').val(),
+                    rc_sco:$('#rc_pco').val(),
+
+                    pco_alg_min:$('#pco_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    rend(json.P, json.R, json.sc_pco, json.br_pco, json.lr_pco, json.sr_pco, json.rc_pco, json.pco_alg_min, json.plot_pco, 'PCO');
+                    },
+                error : function(xhr,errmsg,err) {
+                $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+            });
+        });
+
+        $(document).on('click', '#pio_button',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "index" %}',
+                data:{
+                    P:$('#P').val(),
+                    R:$('#R').val(),
+                    b1:$('#b1').val(),
+                    b2:$('#b2').val(),
+                    Sp:$('#Sp').val(),
+                    N:$('#N').val(),
+
+                    sc_sco:$('#sc_pio').val(),
+                    br_sco:$('#br_pio').val(),
+                    lr_sco:$('#lr_pio').val(),
+                    sr_sco:$('#sr_pio').val(),
+                    rc_sco:$('#rc_pio').val(),
+
+                    pco_alg_min:$('#pio_alg_min').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(json){
+                    $("#block").empty();
+                    rend(json.P, json.R, json.sc_pio, json.br_pio, json.lr_pio, json.sr_pio, json.rc_pio, json.pio_alg_min, json.plot_pio, 'PIO');
                     },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+

@@ -13,31 +13,43 @@ def mainpage(request):
     x_data = [i for i in range(20)]
 
 
-    mP = 3
+    mP = 7
     mR = 2
-    mb1 = 0.1
-    mb2 = 0.1
+    mb1 = 20.0
+    mb2 = 2.0
     mSp = 30
     mN = 10
     mT = mP + mR + 1
-    
+
+
     msc_scb = scb_sc(mb1, mP, mR, mT, mb2, mN, mSp)
     mbr_scb = scb_br(mb1, mP, mR, mT, mb2, mN, mSp)
     mlr_scb = scb_lr(mb1, mP, mR, mT, mb2, mN, mSp)
     msr_scb = scb_sr(mb1, mP, mR, mT, mb2, mN, mSp)
     mrc_scb = scb_rc(mb1, mP, mR, mT, mb2, mN, mSp)
-    #scz = np.arange(20)
-    x = np.linspace(-5, 80, 10)
-    y = np.linspace(-5, 80, 10)
+    scz = np.arange(20)
+
+    x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     xGrid, yGrid = np.meshgrid(y, x)
     sc_z = scb_sc(xGrid, mP, mR, mT, yGrid, mN, mSp)
     br_z = scb_br(xGrid, mP, mR, mT, yGrid, mN, mSp)
     lr_z = scb_lr(xGrid, mP, mR, mT, yGrid, mN, mSp)
     sr_z = scb_sr(xGrid, mP, mR, mT, yGrid, mN, mSp)
     rc_z = scb_rc(xGrid, mP, mR, mT, yGrid, mN, mSp)
-
+    
+    gg = br_z[2,20]
     mscb_alg_min = min_alg(msc_scb, mbr_scb, mlr_scb, msr_scb, mrc_scb)
     mplot_scb = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
+    
+    #sc_z = scb_sc(xGrid, mP, mR, mT, yGrid, mN, mSp)
+    #gg = sc_z
+    #br_z = scb_br(xGrid, mP, mR, mT, yGrid, mN, mSp)
+    #lr_z = scb_lr(xGrid, mP, mR, mT, yGrid, mN, mSp)
+    #sr_z = scb_sr(xGrid, mP, mR, mT, yGrid, mN, mSp)
+    #rc_z = scb_rc(xGrid, mP, mR, mT, yGrid, mN, mSp)
+    #mscb_alg_min = min_alg(msc_scb, mbr_scb, mlr_scb, msr_scb, mrc_scb)
+    #mplot_scb = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
     posts = Calculation.objects.all()
     response_data = {}
     if request.method=='POST': 
@@ -56,61 +68,46 @@ def mainpage(request):
         rc_scb = scb_rc(b1, P, R, T, b2, N, Sp)
 
         sc_z = scb_sc(xGrid, P, R, T, yGrid, N, Sp)
+        
         br_z = scb_br(xGrid, P, R, T, yGrid, N, Sp)
         lr_z = scb_lr(xGrid, P, R, T, yGrid, N, Sp)
         sr_z = scb_sr(xGrid, P, R, T, yGrid, N, Sp)
         rc_z = scb_rc(xGrid, P, R, T, yGrid, N, Sp)
 
+        
+
         scb_alg_min = min_alg(sc_scb, br_scb, lr_scb, sr_scb, rc_scb)
         plot_scb = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
 
+       
         #sc_pcb = pcb_sc(b1, P, R, T, b2, N)
+        
         sc_pcb = pcb_sc(b1, P, R, T, b2, N, Sp)
         br_pcb = pcb_br(b1, P, R, T, b2, N, Sp)
         lr_pcb = pcb_lr(b1, P, R, T, b2, N, Sp)
         sr_pcb = pcb_sr(b1, P, R, T, b2, N, Sp)
         rc_pcb = pcb_rc(b1, P, R, T, b2, N, Sp)
 
-        #sc_z = pcb_sc(xGrid, P, R, T, yGrid, N)
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sc_z[j] = pcb_sc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sc_z[i][j] = pcb_sc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
+        
+        for i in range(21):
+            for j in range(21):
+                br_z[i][j] = pcb_br(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                br_z[j] = pcb_br(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                lr_z[i][j] = pcb_lr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                lr_z[j] = pcb_lr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sr_z[i][j] = pcb_sr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sr_z[j] = pcb_sr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                rc_z[i][j] = pcb_rc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                rc_z[j] = pcb_rc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
 
         pcb_alg_min = min_alg(sc_pcb, br_pcb, lr_pcb, sr_pcb, rc_pcb)
         plot_pcb = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
@@ -121,13 +118,10 @@ def mainpage(request):
         sr_sco = sco_sr(b1, P, R, T, b2, N, Sp)
         rc_sco = sco_rc(b1, P, R, T, b2, N, Sp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sr_z[j] = sco_sr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+
+        for i in range(21):
+            for j in range(21):
+                sc_z[i][j] = sco_sc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
         #sc_z = sco_sc(xGrid, P, R, T, yGrid, N)
         br_z = sco_br(xGrid, P, R, T, yGrid, N, Sp)
         lr_z = sco_lr(xGrid, P, R, T, yGrid, N, Sp)
@@ -149,45 +143,26 @@ def mainpage(request):
         #sr_z = pco_sr(xGrid, P, R, T, yGrid, N)
         #rc_z = pco_rc(xGrid, P, R, T, yGrid, N)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sc_z[j] = pco_sc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sc_z[i][j] = pco_sc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
+        
+        for i in range(21):
+            for j in range(21):
+                br_z[i][j] = pco_br(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                br_z[j] = pco_br(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                lr_z[i][j] = pco_lr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                lr_z[j] = pco_lr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sr_z[i][j] = pco_sr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sr_z[j] = pco_sr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
-
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                rc_z[j] = pco_rc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                rc_z[i][j] = pco_rc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
+        
 
         pco_alg_min = min_alg(sc_pco, br_pco, lr_pco, sr_pco, rc_pco)
         plot_pco = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
@@ -204,45 +179,25 @@ def mainpage(request):
         #sr_z = pio_sr(xGrid, P, R, T, yGrid, N, Sp)
         #rc_z = pio_rc(xGrid, P, R, T, yGrid, N, Sp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sc_z[j] = pio_sc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sc_z[i][j] = pio_sc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
+        
+        for i in range(21):
+            for j in range(21):
+                br_z[i][j] = pio_br(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                br_z[j] = pio_br(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                lr_z[i][j] = pio_lr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                lr_z[j] = pio_lr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                sr_z[i][j] = pio_sr(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                sr_z[j] = pio_sr(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
-
-        j = 0
-        i = 0
-        while i < len(sc_z):
-            while j < len(xGrid[i]):
-                rc_z[j] = pio_rc(xGrid[i][j], P, R, T, yGrid[i][j], N, Sp)
-                j = j+1
-            i = i+1
+        for i in range(21):
+            for j in range(21):
+                rc_z[i][j] = pio_rc(xGrid[i][j], mP, mR, mT, yGrid[i][j], mN, mSp)
 
         pio_alg_min = min_alg(sc_pio, br_pio, lr_pio, sr_pio, rc_pio)
         plot_pio = graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z)
@@ -256,7 +211,7 @@ def mainpage(request):
             }
         return JsonResponse(response_data)
     else: 
-        return render(request, 'mult/index.html', {'xGrid': xGrid[0], 'P': mP, 'R': mR, 'b1': mb1, 'b2': mb2, 'Sp': mSp, 'N': mN, 'plot_scb': mplot_scb, 
+        return render(request, 'mult/index.html', {'xGrid': gg, 'P': mP, 'R': mR, 'b1': mb1, 'b2': mb2, 'Sp': mSp, 'N': mN, 'plot_scb': mplot_scb, 
         'scb_alg_min': mscb_alg_min, 'sc_scb': msc_scb, 'br_scb': mbr_scb, 'lr_scb': mlr_scb, 'sr_scb': msr_scb, 'rc_scb': mrc_scb}) 
     return render(request, 'mult/index.html', {})  
 
