@@ -78,22 +78,22 @@ http://www.tooplate.com/view/2095-level
                                     <div class="form-row tm-search-form-row">
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">P</label>
-                                            <input type="number" class="form-control" id="P" value="7">
+                                            <input type="number" class="form-control" id="P" value="3" min="3" max="20">
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
-                                            <label for="P">R</label>
-                                            <input type="number" class="form-control" id="R" value="2">
+                                            <label for="R">R</label>
+                                            <input type="number" class="form-control" id="R" value="2"  min="2" max="19">
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
-                                            <label for="P">b1</label>
-                                            <input type="number" class="form-control" step="0.1" id="b1" value="20.0">
+                                            <label for="b1">b1</label>
+                                            <input type="number" class="form-control" step="0.1" id="b1" value="0.1">
                                         </div>
                                     </div>
 
                                     <div class="form-row tm-search-form-row">
                                         <div class="form-group tm-form-element tm-form-element-100">
-                                            <label for="P">b2</label>
-                                            <input type="number" class="form-control" step="0.1" id="b2" value="2.0">
+                                            <label for="b2">b2</label>
+                                            <input type="number" class="form-control" step="0.1" id="b2" value="0.1">
                                         </div>
                                         <div class="form-group tm-form-element tm-form-element-100">
                                             <label for="P">Sp</label>
@@ -132,7 +132,6 @@ http://www.tooplate.com/view/2095-level
             </div>
 
             <div class="posts" id= "block">
-                <p> {{ xGrid }}</p>
             <div class="tm-section-2">
                 <div class="container">
                     <div class="row">
@@ -160,24 +159,27 @@ http://www.tooplate.com/view/2095-level
                                 <article class="tm-bg-white mr-2 tm-carousel-item">
                                     <!--<img src="img/img-01.jpg" alt="Image" class="img-fluid">-->
                                     <div class="tm-article-pad">
-                                        <header><h3 class="text-uppercase tm-article-title-2">SCB</h3></header>
-                                        <form>
-                                            <div class="form-group">
-                                              <!--<label for="formControlRange">Example Range input</label>-->
-                                              <input type="range" class="slider" min="3" max="20" id="p_slider" oninput="sizePic('{{ R }}', 'SCB')" value="3">
-                                              <datalist id="tickmarks">
-                                                <option value="3" label="3"></option>
-                                                <option value="20" label="20"></option>
-                                              </datalist>
-                
-                                            </div>
-                                    </form>
+                                        
+                                        
                                     <div class="pict" id="pict">
-                                        <p>P={{ P }}; R={{ R }}</p>
                                         <div class="text-center">
                                         <p><img src="static/img/SCB/{{ P }}-{{ R }}.png" alt="" id="pic"></p>
                                         </div>
-                                    </div>  
+                                    </div> 
+                                    <form>
+                                        <div class="form-group">
+                                            <p> </p>
+                                            <div class = "textslider" id="textslider">
+                                                <p>P={{ P }}; R={{ R }}</p>
+                                            </div>
+                                          <!--<label for="formControlRange">Example Range input</label>-->
+                                          <input type="range" class="slider" min="3" max="20" id="p_slider" oninput="sizePic('SCB')" value="3">
+                                          <p> </p>
+                                          <input type="range" class="slider" min="2" max="{{ R }}" id="r_slider" oninput="sizePic('SCB')" value="2">
+                                          
+            
+                                        </div>
+                                </form> 
                                     </div>                                
                                 </article>                    
                                 </div>    
@@ -194,7 +196,10 @@ http://www.tooplate.com/view/2095-level
                                         <p class="dline"> Значение согласно алгоритму LR: {{ lr_scb }} </p>
                                         <p class="dline"> Значение согласно алгоритму SR: {{ sr_scb }} </p>
                                         <p class="dline"> Значение согласно алгоритму RC: {{ rc_scb }} </p>
-                                        <p class="dline"> <b>Минимальное значение соответствует алгоритму {{ scb_alg_min }}</b></p>
+                                        <p class="dline"> <b>Оптимальное значение соответствует алгоритму {{ scb_alg_min }}</b></p>
+                                        <p></p>
+                                        <div class="text-center"><img src="static/img/{{ scb_alg_min }}.jpg" alt="" id="pic" width="200"></div>
+                                        <p></p>
                                         <p></p>
                                         <a href="#" class="text-uppercase btn-primary tm-btn-primary">Изменить</a>
                                 </div>
@@ -247,12 +252,18 @@ http://www.tooplate.com/view/2095-level
         <script src="/static/js/jquery.singlePageNav.min.js"></script>      <!-- Single Page Nav (https://github.com/ChrisWojcik/single-page-nav) -->
         <script src="/static/css/slick/slick.min.js"></script>                  <!-- http://kenwheeler.github.io/slick/ -->
         <script>
-            function sizePic(R, alg) {
+            function sizePic(alg) {
+                document.getElementById('p_slider').addEventListener('input', function(e){
+                document.getElementById('r_slider').max = this.value - 1;
+                });
+
                 p_slider = document.getElementById("p_slider").value;
+                r_slider = document.getElementById("r_slider").value;
                 //size:$('#size').val();
                 $("#pict").empty();
-                $(".pict").prepend('<p>P=' + p_slider + '; R=' + R + '</p>' + 
-                '<p><img src="static/img/' + alg +'/' + p_slider + '-' + R + '.png" alt="" id="pic"></p>');
+                $("#textslider").empty();
+                $(".textslider").prepend('<p>P=' + p_slider + '; R=' + r_slider + '</p>');
+                $(".pict").prepend('<p><img src="static/img/' + alg +'/' + p_slider + '-' + r_slider + '.png" alt="" id="pic"></p>');
         }
         function rend(P, R, sc, br, lr, sr, rc, alg_min, plot, alg_name){
                     
@@ -260,16 +271,16 @@ http://www.tooplate.com/view/2095-level
                 '<div class="container">' +
                     '<div class="row">' +
                         '<div class="col text-center">' +
-                            '<h2 class="tm-section-title">' + alg_name + '</h2>' +
-                        '</div>' +                
+                            '<h2 class="tm-section-title">SCB</h2>' +
+                        '</div>' +            
                     '</div>' +
-                '</div>' +
+                '</div>' +        
             '</div>' +
             
             '<div class="tm-position-relative">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">' +
-                '<polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>       ' +            
-                '</svg> ' +
+                    '<polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>' +                   
+                '</svg>' + 
 
             '</div>' +
             
@@ -277,29 +288,32 @@ http://www.tooplate.com/view/2095-level
                 '<div class="container">' +
                     '<div class="row">' +
                         '<div class="col-sm-12 col-md-12 col-lg-7 col-xl-7">' +
-                            '<div class="tm-article-carousel">      ' +                      
+                            '<div class="tm-article-carousel">' +                            
                                 '<article class="tm-bg-white mr-2 tm-carousel-item">' +
                                     '<div class="tm-article-pad">' +
-                                        '<header><h3 class="text-uppercase tm-article-title-2">'+ alg_name + '</h3></header>' +
-                                        '<form>' +
-                                            '<div class="form-group">' +
-                                              '<input type="range" class="slider" min="3" max="20" id="p_slider" oninput="sizePic(' + R + ', \'' + alg_name + '\')" value="'+ P + '">' +
-                                              '<datalist id="tickmarks">' +
-                                                '<option value="3" label="3"></option>' +
-                                                '<option value="20" label="20"></option>' +
-                                              '</datalist>' +
-                
-                                            '</div>' +
-                                    '</form>' +
+                                        
+                                        
                                     '<div class="pict" id="pict">' +
-                                        '<p>P=' + P + '; R=' + R + '</p>' +
                                         '<div class="text-center">' +
-                                        '<p><img src="static/img/' + alg_name + '/' + P + '-' + R + '.png" alt="" id="pic"></p>' +
+                                        '<p><img src="static/img/'+ alg_name + '/' + P + '-'+ R +'.png" alt="" id="pic"></p>' +
                                         '</div>' +
-                                    '</div>  ' +
-                                    '</div>                         ' +       
-                                '</article>                    ' +
-                                '</div>    ' +
+                                    '</div>' +
+                                    '<form>' +
+                                        '<div class="form-group">' +
+                                            '<p> </p>' +
+                                            '<div class = "textslider" id="textslider">' +
+                                                '<p>P=' + P + '; R='+ R +'</p>' +
+                                            '</div>' +
+                                          '<input type="range" class="slider" min="3" max="20" id="p_slider" oninput="sizePic(\''+ alg_name + '\')" value="3">' +
+                                          '<p> </p>' +
+                                          '<input type="range" class="slider" min="2" max="' + R + '" id="r_slider" oninput="sizePic(\''+ alg_name + '\')" value="2">' +
+                                          
+            
+                                        '</div>' +
+                                '</form>' + 
+                                    '</div>' +                                
+                                '</article>' +                    
+                                '</div>' +    
                         '</div>' +
                         
                         '<div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 tm-recommended-container">' +
@@ -308,13 +322,15 @@ http://www.tooplate.com/view/2095-level
                                     '<h3 class="tm-color-white tm-sidebar-title">Расчет для исходных данных</h3>' +
                                     '</div>' +
                                 '<div class="tm-sidebar-pad-2">' +
-                                    
-                                        '<p class="dline"> Значение согласно алгоритму SC: ' + sc + '</p>' +
-                                        '<p class="dline"> Значение согласно алгоритму BR: ' + br + '</p>' +
-                                        '<p class="dline"> Значение согласно алгоритму LR: ' + lr + '</p>' +
-                                        '<p class="dline"> Значение согласно алгоритму SR: ' + sr + '</p>' +
-                                        '<p class="dline"> Значение согласно алгоритму RC: ' + rc + '</p>' +
-                                        '<p class="dline"> <b>Минимальное значение соответствует алгоритму ' + alg_min + '</b></p>' +
+                                        '<p class="dline"> Значение согласно алгоритму SC: '+ sc + '</p>' +
+                                        '<p class="dline"> Значение согласно алгоритму BR: '+ br + ' </p>' +
+                                        '<p class="dline"> Значение согласно алгоритму LR: '+ lr + ' </p>' +
+                                        '<p class="dline"> Значение согласно алгоритму SR: '+ sr + ' </p>' +
+                                        '<p class="dline"> Значение согласно алгоритму RC: '+ rc + ' </p>' +
+                                        '<p class="dline"> <b>Оптимальное значение соответствует алгоритму '+ alg_min + '</b></p>' +
+                                        '<p></p>' +
+                                        '<div class="text-center"><img src="static/img/'+ alg_min + '.jpg" alt="" id="pic" width="200"></div>' +
+                                        '<p></p>' +
                                         '<p></p>' +
                                         '<a href="#" class="text-uppercase btn-primary tm-btn-primary">Изменить</a>' +
                                 '</div>' +
@@ -327,16 +343,16 @@ http://www.tooplate.com/view/2095-level
             '<div>' +
                 
                 
-                '<div class="tm-section tm-section-pad tm-bg-img" id="tm-section-5">' +                                                        
+                '<div class="tm-section tm-section-pad tm-bg-img" id="tm-section-5">' +                                                       
                     '<div class="container ie-h-align-center-fix">' +
                         '<div class="row tm-flex-align-center">' +
                             '<div class="col-xs-12 col-md-12 col-lg-3 col-xl-3 tm-media-title-container">' +
-                                '<h2 class="text-uppercase tm-section-title-2">' + alg_name + '</h2>' +
+                                '<h2 class="text-uppercase tm-section-title-2">'+ alg_name + '</h2>' +
                             '</div>' +
                             '<div class="col-xs-12 col-md-12 col-lg-9 col-xl-9 mt-0 mt-sm-3">' +
                                 '<div class="ml-auto tm-bg-white-shadow tm-pad tm-media-container">' +
                                     '<p>' + plot + '</p>' +
-                                '</div>       ' +                     
+                                '</div>' +                            
                             '</div>' +
                         '</div>' +
                     '</div>' +
@@ -406,7 +422,6 @@ http://www.tooplate.com/view/2095-level
                 success:function(json){
                     $("#block").empty();
                     rend(json.P, json.R, json.sc_pcb, json.br_pcb, json.lr_pcb, json.sr_pcb, json.rc_pcb, json.pcb_alg_min, json.plot_pcb, 'PCB');
-                    $(".posts").prepend('<p>' + json.ff4 +'</p>');
                     },
                 error : function(xhr,errmsg,err) {
                 $('#results').html("<div data-alert>Oops! We have encountered an error: "+errmsg+

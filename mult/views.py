@@ -211,7 +211,7 @@ def mainpage(request):
             }
         return JsonResponse(response_data)
     else: 
-        return render(request, 'mult/index.html', {'xGrid': gg, 'P': mP, 'R': mR, 'b1': mb1, 'b2': mb2, 'Sp': mSp, 'N': mN, 'plot_scb': mplot_scb, 
+        return render(request, 'mult/index.html', {'P': mP, 'R': mR, 'b1': mb1, 'b2': mb2, 'Sp': mSp, 'N': mN, 'plot_scb': mplot_scb, 
         'scb_alg_min': mscb_alg_min, 'sc_scb': msc_scb, 'br_scb': mbr_scb, 'lr_scb': mlr_scb, 'sr_scb': msr_scb, 'rc_scb': mrc_scb}) 
     return render(request, 'mult/index.html', {})  
 
