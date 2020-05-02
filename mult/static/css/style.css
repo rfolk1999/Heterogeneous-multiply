@@ -7,13 +7,19 @@
     margin-top: 50px;
 }
 
-.container {
-    padding-left: 0px;
+p.dline {
+  line-height: 1;
+ }
+
+ .tm-section-pad {
+  padding-bottom: 100px;
 }
 
-.picture {
-    margin-left: 110px;
+.container {
+  width:100%;
 }
+
+
 .slider {
     -webkit-appearance: none;
     width: 100%;
