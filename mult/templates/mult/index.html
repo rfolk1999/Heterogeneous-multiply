@@ -256,7 +256,9 @@ http://www.tooplate.com/view/2095-level
                 document.getElementById('p_slider').addEventListener('input', function(e){
                 document.getElementById('r_slider').max = this.value - 1;
                 });
-
+                document.getElementById('r_slider').addEventListener('input', function(e){
+                document.getElementById('p_slider').min = this.value*1 + 1;
+                });
                 p_slider = document.getElementById("p_slider").value;
                 r_slider = document.getElementById("r_slider").value;
                 //size:$('#size').val();
@@ -271,7 +273,7 @@ http://www.tooplate.com/view/2095-level
                 '<div class="container">' +
                     '<div class="row">' +
                         '<div class="col text-center">' +
-                            '<h2 class="tm-section-title">SCB</h2>' +
+                            '<h2 class="tm-section-title">' + alg_name + '</h2>' +
                         '</div>' +            
                     '</div>' +
                 '</div>' +        

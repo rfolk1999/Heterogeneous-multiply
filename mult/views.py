@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 
 def mainpage(request):
-    x_data = [i for i in range(20)]
+    
 
 
     mP = 7
@@ -29,8 +29,11 @@ def mainpage(request):
     mrc_scb = scb_rc(mb1, mP, mR, mT, mb2, mN, mSp)
     scz = np.arange(20)
 
-    x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-    y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    x = []
+    y = []
+    for i in range(0, 21):
+        x.append(i)
+        y.append(i)
     xGrid, yGrid = np.meshgrid(y, x)
     sc_z = scb_sc(xGrid, mP, mR, mT, yGrid, mN, mSp)
     br_z = scb_br(xGrid, mP, mR, mT, yGrid, mN, mSp)
@@ -314,24 +317,7 @@ def min_alg(sc, br, lr, sr, rc):
 
 def graph(x, y, sc_z, br_z, lr_z, sr_z, rc_z):
    
-    #pl = plot([Scatter3d(x=x_data, y=x_data, z=sc_z_data,
-    #                mode='lines', name='SC',
-    #                opacity=1, marker_color='fuchsia'),
-    #                Scatter3d(x=x_data, y=x_data, z=br_z_data,
-    #                mode='lines', name='BR',
-    #                opacity=1, marker_color='blue'),
-    #                Scatter3d(x=x_data, y=x_data, z=lr_z_data,
-    #                mode='lines', name='LR',
-    #                opacity=1, marker_color='red'),
-    #                Scatter3d(x=x_data, y=x_data, z=sr_z_data,
-    #                mode='lines', name='SR',
-    #                opacity=1, marker_color='green'),
-    #                Scatter3d(x=x_data, y=x_data, z=rc_z_data,
-    #                mode='lines', name='RC',
-    #                opacity=1, marker_color='black')
-    # ],
-    #           output_type='div')
-
+   
     pl = plot([Surface(x=x, y=y, z=sc_z, name='SC', colorscale="solar", showscale=False, opacity=1),
     Surface(x=x, y=y, z=br_z, name='BR', showscale=False, colorscale="Blues", opacity=1),
     Surface(x=x, y=y, z=lr_z, name='LR', showscale=False, colorscale="Reds", opacity=1),
